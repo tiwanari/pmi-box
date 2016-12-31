@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "util/split.h"
 #include "morph.h"
+#include "util/split.h"
 
 namespace pmi_toolkit {
 /**
