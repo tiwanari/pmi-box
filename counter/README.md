@@ -62,18 +62,18 @@ e.g.,
 
 
 ```sh
-# echo "今日はいい天気ですね" | jdepp 2> /dev/null | ./main 良い 悪い NOUN
+$ echo "今日は良い天気ですね" | jdepp 2> /dev/null | ./main 良い 悪い NOUN
 ADJ,良い
 ANT,悪い
 TAG,NOUN
 TOTAL_WORDS,6
 VOCABULARY,6
-POS_OCCURRENCES,0
+POS_OCCURRENCES,1
 NEG_OCCURRENCES,0
 OC,天気,1
-P_COOC,天気,0
+P_COOC,天気,1
 N_COOC,天気,0
 OC,今日,1
-P_COOC,今日,0
+P_COOC,今日,1
 N_COOC,今日,0
 ```
