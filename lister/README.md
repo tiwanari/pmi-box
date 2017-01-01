@@ -3,6 +3,7 @@ lister
 
 [counter](./counter) が出力した結果をもとに
 Turney の極性指標 (SO 値) に基いての k 個の best / worst の
+単語を出力するプログラムです．
 
 参考: [Turneyらの評価極性の分類]( https://goo.gl/1AuW9W )
 
