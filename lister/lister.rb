@@ -14,7 +14,7 @@ NEG_CO_OCCURRENCES_STR = "S_N_COOC"
 
 class Lister
     attr_accessor :min_oc
-    attr_reader :ignored
+    attr_reader :ignored, :adjective, :antonym, :tag, :total_words, :vocabulary, :pos_oc, :neg_oc
 
     def initialize(input)
         @input = input

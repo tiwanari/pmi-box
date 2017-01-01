@@ -34,6 +34,11 @@ STDERR.puts "calculated!"
 
 STDERR.puts
 STDERR.puts "===== output ====="
+puts "adjective: #{lister.adjective} <-> antonym: #{lister.antonym}"
+puts "tag: #{lister.tag}"
+puts "total_words: #{lister.total_words}, vocabulary: #{lister.vocabulary}"
+puts "pos_occurrences: #{lister.pos_oc}, neg_occurrences: #{lister.neg_oc}"
+puts
 puts "ignored: #{lister.ignored}"
 puts "best  K: "
 pp lister.best_k(k)
