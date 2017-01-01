@@ -34,7 +34,13 @@ void Counter::count(Parser& parser)
     reset();
 
     try {
-        while (parser.next()) _count(parser);
+        while (parser.next()) {
+            _count(parser);
+            if (parser.lines() % 1000 == 0) {
+                std::cerr << "\r" << "read " << parser.lines() << " lines";
+            }
+        }
+        std::cerr << std::endl;
     }
     catch (const std::runtime_error& e) {
         std::cerr << "counting error!" << std::endl << std::flush;

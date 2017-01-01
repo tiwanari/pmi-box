@@ -33,7 +33,7 @@ private:
 public:
     Parser(const Morph::MORPH_TYPE type);
     bool next();
-    const long& numberOfLines() const { return m_num_of_lines; }
+    const long& lines() const { return m_num_of_lines; }
     const std::string& raw() const { return m_cur_sentence; }
     const std::vector<Phrase>& phrases() const { return m_cur_phrases; }
     std::vector<std::shared_ptr<Morph>> morphs() const;

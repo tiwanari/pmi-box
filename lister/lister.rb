@@ -13,11 +13,16 @@ POS_CO_OCCURRENCES_STR = "S_P_COOC"
 NEG_CO_OCCURRENCES_STR = "S_N_COOC"
 
 class Lister
+    attr_accessor :min_oc
+    attr_reader :ignored
+
     def initialize(input)
         @input = input
         @words = []
         @raw_data = { OCCURRENCES_STR => {}, POS_CO_OCCURRENCES_STR => {}, NEG_CO_OCCURRENCES_STR => {},}
         @so_values = {}
+        @ignored = 0
+        @min_oc = 1
     end
 
     def read_adjective(row)
@@ -69,6 +74,12 @@ class Lister
             raise "#{rows[0][0]} != #{OCCURRENCES_STR}" if rows[0][0] == OCCURRENCES_STR
             raise "#{rows[1][0]} != #{POS_CO_OCCURRENCES_STR}" if rows[1][0] == POS_CO_OCCURRENCES_STR
             raise "#{rows[2][0]} != #{NEG_CO_OCCURRENCES_STR}" if rows[2][0] == NEG_CO_OCCURRENCES_STR
+
+            if rows[0][2].to_i < min_oc
+                @ignored += 1
+                next
+            end
+
             @raw_data[OCCURRENCES_STR][rows[0][1]] = rows[0][2].to_i
             @raw_data[POS_CO_OCCURRENCES_STR][rows[1][1]] = rows[1][2].to_i
             @raw_data[NEG_CO_OCCURRENCES_STR][rows[2][1]] = rows[2][2].to_i
@@ -96,6 +107,7 @@ class Lister
 
     def calc_so_scores
         @raw_data[OCCURRENCES_STR].each do |k, v|
+            next if k == @adjective || k == @antonym
             @so_values[k] = so(k)
         end
     end

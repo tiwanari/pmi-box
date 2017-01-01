@@ -1,21 +1,38 @@
 #!/usr/bin/env ruby
 require 'optparse'
 require 'csv'
+require 'pp'
 require_relative 'lister'
 
-params = ARGV.getopts('h', 'input:', 'k:')
+params = ARGV.getopts('h', 'input:', 'k:', 'min-occurrence:')
 
 if params['h'] || !params['input']
-    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k k_items(default: 10)"
+    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurence (default: 1)"
     exit 1
 end
 
-k = params["k"].empty? ? 10 : params["k"].to_i
+input = params['input']
+k = params["k"].nil? ? 10 : params["k"].to_i
+m = params["min-occurrence"].nil? ? 1 : params["min-occurrence"].to_i
 
-lister = Lister.new(params['input'])
+STDERR.pp "input file: #{input}"
+STDERR.pp "k: #{k}"
+STDERR.pp "min occurrence: #{m}"
+
+lister = Lister.new(input)
+lister.min_oc = m
+
+STDERR.pp "reading #{input}..."
 lister.read
-lister.calc_so_scores
-lister.output
+STDERR.pp "read!"
 
-p lister.best_k(k)
-p lister.worst_k(k)
+STDERR.pp "calculating so-scores..."
+lister.calc_so_scores
+STDERR.pp "calculated!"
+
+# lister.output
+pp "ignored: #{lister.ignored}"
+pp "best  K: "
+pp lister.best_k(k)
+pp "worst K: "
+pp lister.worst_k(k)
