@@ -107,7 +107,6 @@ class Lister
 
     def calc_so_scores
         @raw_data[OCCURRENCES_STR].each do |k, v|
-            next if k == @adjective || k == @antonym
             @so_values[k] = so(k)
         end
     end
