@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 #include "util/split.h"
 
 namespace pmi_toolkit {
