@@ -4,9 +4,9 @@ require 'csv'
 require 'pp'
 require_relative 'lister'
 
-params = ARGV.getopts('h', 'input:', 'k:', 'min-occurrence:')
+params = ARGV.getopts('input:', 'k:', 'min-occurrence:')
 
-if params['h'] || !params['input']
+if !params['input']
     STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurence (default: 1)"
     exit 1
 end
