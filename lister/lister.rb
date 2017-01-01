@@ -1,14 +1,5 @@
 #!/usr/bin/env ruby
-require 'fileutils'
-require 'optparse'
 require 'csv'
-
-params = ARGV.getopts('h', 'input:')
-
-if params['h'] || !params['input']
-    STDERR.puts "Usage: #{__FILE__} --input counted.csv"
-    exit 1
-end
 
 ADJ_STR = "ADJ"
 ANT_STR = "ANT"
@@ -121,11 +112,3 @@ class Lister
         p @so_values
     end
 end
-
-lister = Lister.new(params['input'])
-lister.read
-lister.calc_so_scores
-lister.output
-p lister.best_k(10)
-p lister.worst_k(10)
-
