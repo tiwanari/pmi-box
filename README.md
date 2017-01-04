@@ -8,6 +8,9 @@ Pointwise Mutual Information を使う自然言語処理の日本語用ツール
 対象とする品詞に属する単語との共起回数を数え上げるプログラムです．
 詳しくは [README](./counter/README.md) をご覧ください．
 
+# [reducer](./reducer)
+[counter](./counter) が出力した結果を複数受け取ってまとめるプログラムです．
+詳しくは [README](./reducer/README.md) をご覧ください．
 
 # [lister](./lister)
 [counter](./counter) が出力した結果をもとに

@@ -5,6 +5,8 @@ lister
 Turney の極性指標 (SO 値) に基いての k 個の best / worst の
 単語を出力するプログラムです．
 
+また，[reducer](../reducer) によって集約された結果も受け取ることができます．
+
 参考: [Turneyらの評価極性の分類]( https://goo.gl/1AuW9W )
 
 # Usage
