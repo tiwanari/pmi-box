@@ -1,0 +1,7 @@
+main
+debug
+test
+*.dSYM
+obj/
+unittest/out/*
+!unittest/out/.keep
