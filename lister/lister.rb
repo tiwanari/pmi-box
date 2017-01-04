@@ -1,20 +1,20 @@
-#!/usr/bin/env ruby
 require 'csv'
 
-ADJ_STR = "ADJ"
-ANT_STR = "ANT"
-TAG_STR = "TAG"
-TOTAL_WORDS_STR = "TOTAL_WORDS"
-VOCABULARY_STR = "VOCABULARY"
-POS_OCCURRENCES_STR = "POS_OCCURRENCES"
-NEG_OCCURRENCES_STR = "NEG_OCCURRENCES"
-OCCURRENCES_STR = "S_OC"
-POS_CO_OCCURRENCES_STR = "S_P_COOC"
-NEG_CO_OCCURRENCES_STR = "S_N_COOC"
 
 class Lister
     attr_accessor :min_oc
     attr_reader :ignored, :adjective, :antonym, :tag, :total_words, :vocabulary, :pos_oc, :neg_oc
+
+    ADJ_STR = "ADJ"
+    ANT_STR = "ANT"
+    TAG_STR = "TAG"
+    TOTAL_WORDS_STR = "TOTAL_WORDS"
+    VOCABULARY_STR = "VOCABULARY"
+    POS_OCCURRENCES_STR = "POS_OCCURRENCES"
+    NEG_OCCURRENCES_STR = "NEG_OCCURRENCES"
+    OCCURRENCES_STR = "OC"
+    POS_CO_OCCURRENCES_STR = "P_COOC"
+    NEG_CO_OCCURRENCES_STR = "N_COOC"
 
     def initialize(input)
         @input = input
@@ -26,37 +26,37 @@ class Lister
     end
 
     def read_adjective(row)
-        raise "#{row[0]} != #{ADJ_STR}" unless row[0] == ADJ_STR
+        assert_eq(ADJ_STR, row[0])
         @adjective = row[1]
     end
 
     def read_antonym(row)
-        raise "#{row[0]} != #{ANT_STR}" unless row[0] == ANT_STR
+        assert_eq(ANT_STR, row[0])
         @antonym = row[1]
     end
 
     def read_tag(row)
-        raise "#{row[0]} != #{TAG_STR}" unless row[0] == TAG_STR
+        assert_eq(TAG_STR, row[0])
         @tag = row[1]
     end
 
     def read_total_words(row)
-        raise "#{row[0]} != #{TOTAL_WORDS_STR}" unless row[0] == TOTAL_WORDS_STR
+        assert_eq(TOTAL_WORDS_STR, row[0])
         @total_words = row[1].to_i
     end
 
     def read_vocab(row)
-        raise "#{row[0]} != #{VOCABULARY_STR}" unless row[0] == VOCABULARY_STR
+        assert_eq(VOCABULARY_STR, row[0])
         @vocabulary = row[1].to_i
     end
 
     def read_pos_oc(row)
-        raise "#{row[0]} != #{POS_OCCURRENCES_STR}" unless row[0] == POS_OCCURRENCES_STR
+        assert_eq(POS_OCCURRENCES_STR, row[0])
         @pos_oc = row[1].to_i
     end
 
     def read_neg_oc(row)
-        raise "#{row[0]} != #{NEG_OCCURRENCES_STR}" unless row[0] == NEG_OCCURRENCES_STR
+        assert_eq(NEG_OCCURRENCES_STR, row[0])
         @neg_oc = row[1].to_i
     end
 
@@ -71,9 +71,9 @@ class Lister
         read_neg_oc(reader.gets)        # 7
 
         reader.each_slice(3) do |rows|
-            raise "#{rows[0][0]} != #{OCCURRENCES_STR}" if rows[0][0] == OCCURRENCES_STR
-            raise "#{rows[1][0]} != #{POS_CO_OCCURRENCES_STR}" if rows[1][0] == POS_CO_OCCURRENCES_STR
-            raise "#{rows[2][0]} != #{NEG_CO_OCCURRENCES_STR}" if rows[2][0] == NEG_CO_OCCURRENCES_STR
+            assert_eq(OCCURRENCES_STR, rows[0][0])
+            assert_eq(POS_CO_OCCURRENCES_STR, rows[1][0])
+            assert_eq(NEG_CO_OCCURRENCES_STR, rows[2][0])
 
             if rows[0][2].to_i < min_oc
                 @ignored += 1
@@ -121,5 +121,10 @@ class Lister
 
     def output
         p @so_values
+    end
+
+private
+    def assert_eq(expected, actual)
+        raise "(ACTUAL) #{actual} != #{expected} (EXPECTED)" if actual != expected
     end
 end

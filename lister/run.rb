@@ -7,7 +7,7 @@ require_relative 'lister'
 params = ARGV.getopts('', 'input:', 'k:', 'min-occurrence:')
 
 if !params['input']
-    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurence (default: 1)"
+    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurrence (default: 1)"
     exit 1
 end
 

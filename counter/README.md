@@ -51,10 +51,10 @@ NOTE: 現在の実装では，特に係り受けを使う必要はないので�
  5| VOCABULARY, vocab
  6| POS_OCCURRENCES, pos_occurrences
  7| NEG_OCCURRENCES, neg_occurrences
- 8| S_OC, target0, 100
- 9| S_P_COOC, target0, 10
-10| S_N_COOC, target0, 10
-11| S_OC, target1, 200
+ 8| OC, target0, 100
+ 9| P_COOC, target0, 10
+10| N_COOC, target0, 10
+11| OC, target1, 200
 12| ...
 ```
 

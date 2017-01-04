@@ -11,9 +11,11 @@ Turney の極性指標 (SO 値) に基いての k 個の best / worst の
 ## run
 
 ```
-./run.rb --input counted.csv -k (default: 10) --min-occurence (default: 1)
+./run.rb --input counted.csv -k (default: 10) --min-occurrence (default: 1)
 e.g., ./run.rb --input counted.csv -k 100
 ```
+
+なお， `--input` や `--min-occurrence` には， `-i` や `-m` が代わりに使えます．
 
 #### 入力
 [counter](./counter) が出力した結果です．
@@ -25,7 +27,7 @@ e.g., ./run.rb --input counted.csv -k 100
 e.g.,
 
 ```sh
-$ ./run.rb --input test_100000000.csv -k 10 --min-occurrence 5
+$ ./run.rb -i test_100000000.csv -k 10 -m 5
 input file: test_100000000.csv
 k: 10
 min occurrence: 5
