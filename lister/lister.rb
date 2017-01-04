@@ -70,19 +70,13 @@ class Lister
         read_pos_oc(reader.gets)        # 6
         read_neg_oc(reader.gets)        # 7
 
-        reader.each_slice(3) do |rows|
-            assert_eq(OCCURRENCES_STR, rows[0][0])
-            assert_eq(POS_CO_OCCURRENCES_STR, rows[1][0])
-            assert_eq(NEG_CO_OCCURRENCES_STR, rows[2][0])
-
-            if rows[0][2].to_i < min_oc
-                @ignored += 1
-                next
+        reader.each do |row|
+            case row[0]
+            when OCCURRENCES_STR,POS_CO_OCCURRENCES_STR,NEG_CO_OCCURRENCES_STR
+                @raw_data[row[0]][row[1]] = row[2].to_i
+            else
+                raise "UNEXPECTED TAG: #{row[0]}"
             end
-
-            @raw_data[OCCURRENCES_STR][rows[0][1]] = rows[0][2].to_i
-            @raw_data[POS_CO_OCCURRENCES_STR][rows[1][1]] = rows[1][2].to_i
-            @raw_data[NEG_CO_OCCURRENCES_STR][rows[2][1]] = rows[2][2].to_i
         end
     end
 
@@ -101,12 +95,18 @@ class Lister
         # and add 1 smoothing (each denominator is canceled, so it's easy)
         # -> log(co-occurrence(x, y_pos) + 1) - log(count(y_pos) + 1)
         #   - [log(co-occurrence(x, y_neg) + 1) - log(count(y_neg) + 1)]
+
         (Math.log(@raw_data[POS_CO_OCCURRENCES_STR][word] + 1) - Math.log(@pos_oc + 1)) \
         - (Math.log(@raw_data[NEG_CO_OCCURRENCES_STR][word] + 1) - Math.log(@neg_oc + 1))
     end
 
     def calc_so_scores
         @raw_data[OCCURRENCES_STR].each do |k, v|
+            # ignore rare words
+            if v < min_oc
+                @ignored += 1
+                next
+            end
             @so_values[k] = so(k)
         end
     end
