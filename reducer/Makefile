@@ -53,7 +53,7 @@ run:
 
 .PHONY: test
 test: $(TEST_LIBS) $(test_objs) $(test_h_files)
-	$(CXX) $(CXXFLAGS) $(test_opts) $(TEST_LIBS) -o $@ $(test_objs)
+	$(CXX) $(CXXFLAGS) $(test_opts) -o $@ $(test_objs) $(TEST_LIBS)
 	./$@
 
 $(TEST_STATIC_LIBRARY):
