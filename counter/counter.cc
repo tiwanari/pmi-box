@@ -37,7 +37,7 @@ void Counter::count(Parser& parser)
         while (parser.next()) {
             switch (m_count_type) {
                 case CountType::COOC:
-                    countOccurrences(parser);
+                    countCooccurrences(parser);
                     break;
                 case CountType::DEP:
                     countDependencies(parser);
@@ -94,7 +94,7 @@ bool Counter::searchTarget(
     return did_found;
 }
 
-void Counter::countOccurrences(const Parser& parser)
+void Counter::countCooccurrences(const Parser& parser)
 {
     bool pos_flag = false;
     bool neg_flag = false;

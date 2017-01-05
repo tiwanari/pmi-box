@@ -44,7 +44,7 @@ private:
 
     bool searchTarget(const Phrase& phrase, std::set<std::string>* found_targets);
     void countStats(const Phrase& phrase);
-    void countOccurrences(const Parser& parser);
+    void countCooccurrences(const Parser& parser);
     // == dep ===
     void countDependencies(const Parser& parser);
     void countDependedTarget(const Parser& parser, const int src, const bool is_pos);
