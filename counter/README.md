@@ -20,8 +20,15 @@ _counter_ フォルダにて `make` でコンパイルされます．`make test`
 ## run
 
 ```
-./main adjective antonym target_pos < text_processed_with_jdepp
-e.g., ./main 大きい "" ADJECTIVE < foo.txt
+usage: ./main --adjective=string --antonym=string --target_pos=string [options] ...
+options:
+  -a, --adjective     adjective (string)
+  -n, --antonym       antonym (string)
+  -p, --target_pos    POS [NOUN | VERB | ADJECTIVE] (string)
+  -m, --morph         morph type [IPA | JUMAN] (string [=IPA])
+  -?, --help          print this message./main adjective antonym target_pos < text_processed_with_jdepp
+
+e.g., ./main -a 大きい -n "" -p ADJECTIVE < foo.txt
 ```
 
 `target_pos` は，以下の 3 つから選べます．
@@ -31,6 +38,13 @@ e.g., ./main 大きい "" ADJECTIVE < foo.txt
 | NOUN        | 名詞                |
 | VERB        | 動詞                |
 | ADJECTIVE   | 形容詞 (と形容動詞) |
+
+`maroph` は，以下の 3 つから選べます．
+
+| maroph | 意味                |
+|:-------|:--------------------|
+| IPA    | IPA 辞書形態素      |
+| JUMAN  | JUAMN 辞書形態素    |
 
 #### 入力
 入力として [J.DepP - C++ implementation of Japanese Dependency Parsers]( https://goo.gl/6iF0mD ) によって処理された文を想定しています．
@@ -62,7 +76,7 @@ e.g.,
 
 
 ```sh
-$ echo "今日は良い天気ですね" | jdepp 2> /dev/null | ./main 良い 悪い NOUN
+$ echo "今日は良い天気ですね" | jdepp 2> /dev/null | ./main -a 良い -n 悪い -p NOUN
 ADJ,良い
 ANT,悪い
 TAG,NOUN

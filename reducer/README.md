@@ -21,8 +21,13 @@ _reducer_ フォルダにて `make` でコンパイルされます．`make test`
 ## run
 
 ```
-./main input_list_file output_file
-e.g., ./main counted_cvs.txt output.csv
+usage: ./main --input_list_file=string --output_file=string [options] ...
+options:
+  -i, --input_list_file    a file shows a list of inputs (string)
+  -o, --output_file        a file for output (string)
+  -?, --help               print this message./main input_list_file output_file
+
+e.g., ./main -i counted_cvs.txt -o output.csv
 ```
 
 `input_list_file` は，1 行に 1 ファイルを指定した

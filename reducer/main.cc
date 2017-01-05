@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "reducer.h"
 #include "util/trim.h"
+#include "util/cmdline.h"
 
 void readLinesFromAFile(
     const std::string& input_filename,
@@ -48,23 +49,29 @@ void reduce(
     std::cout << "reduced!" << std::endl;
 }
 
+const std::string ARG_IN  = "input_list_file";
+const std::string ARG_OUT = "output_file";
+
+void parseArguments(cmdline::parser& p, int argc, char** argv)
+{
+    p.add<std::string>(ARG_IN,  'i', "a file shows a list of inputs", true);
+    p.add<std::string>(ARG_OUT, 'o', "a file for output", true);
+    p.parse_check(argc, argv);
+}
+
 int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "ja_JP.UTF-8");
 
-    // std::cout << "SVM" << std::endl;
-    if (argc <= 2) {
-        std::cout
-            << "Usage: "
-            << argv[0] << " input_list_file output_file" << std::endl
-            << "see README.md for more information." << std::endl;
-        return 1;
-    }
+    cmdline::parser p;
+    parseArguments(p, argc, argv);
 
-    const std::string kInputFileList = argv[1];
-    const std::string kOutputFile = argv[2];
+    // === read arguments ===
+    const std::string input_list_file   = p.get<std::string>(ARG_IN);
+    const std::string output_file       = p.get<std::string>(ARG_OUT);
+    // === /read arguments ===
 
-    reduce(kInputFileList, kOutputFile);
+    reduce(input_list_file, output_file);
 
     return 0;
 }
