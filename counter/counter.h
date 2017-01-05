@@ -12,11 +12,18 @@ namespace pmi_toolkit {
 class Counter {
     typedef long long COUNT;
     typedef std::unordered_map<std::string, COUNT> WORD_COUNT;
+public:
+    enum class CountType : unsigned int {
+        COOC,
+        DEP,
+    };
 private:
     std::string m_adjective;
     std::string m_antonym;
     CounterTags::Target m_target;
-    Morph::POS_TAG m_tag;
+    Morph::POSTag m_tag;
+
+    CountType m_count_type;
 
     COUNT m_total_words; // # all words
     std::set<std::string> m_vocabulary; // # of vocabulary
@@ -33,17 +40,24 @@ private:
 
 private:
     void reset();
-    Morph::POS_TAG convertTargetToTag(const CounterTags::Target& target) const;
+    Morph::POSTag convertTargetToTag(const CounterTags::Target& target) const;
 
     bool searchTarget(const Phrase& phrase, std::set<std::string>* found_targets);
-    void _count(const Parser& parser);
+    void countStats(const Phrase& phrase);
+    void countCooccurrences(const Parser& parser);
+    // == dep ===
+    void countDependencies(const Parser& parser);
+    void countDependedTarget(const Parser& parser, const int src, const bool is_pos);
+    void countDependingTarget(const Parser& parser, const int dst, const bool is_pos);
+    // == /dep ===
 
     void _write(std::ostream& output_file) const;
 public:
     Counter(const std::string& adjective,
             const std::string& antonym,
             const CounterTags::Target& target)
-        : m_adjective(adjective), m_antonym(antonym), m_target(target) { m_tag = convertTargetToTag(target); }
+        : m_adjective(adjective), m_antonym(antonym), m_target(target), m_count_type(CountType::COOC) { m_tag = convertTargetToTag(target); }
+    void setCountType(const CountType& countType) { m_count_type = countType; }
     void count(Parser& parser);
     void output() const { _write(std::cout); }
     void save(const std::string& output_filename) const;

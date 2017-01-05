@@ -7,9 +7,9 @@ namespace pmi_toolkit {
 std::shared_ptr<Morph> Phrase::createMorph(const std::string& infos)
 {
     switch (m_morph_type) {
-        case Morph::MORPH_TYPE::JUMAN:
+        case Morph::MorphType::JUMAN:
             return std::shared_ptr<Morph>(new JumanMorph(infos));
-        case Morph::MORPH_TYPE::IPADIC:
+        case Morph::MorphType::IPADIC:
             return std::shared_ptr<Morph>(new IPAMorph(infos));
         default:
             // TODO: throw an exception
@@ -32,8 +32,8 @@ void Phrase::add(const std::shared_ptr<Morph> morph)
     // e.g.,
     // 綺麗   	名詞,形容動詞語幹,*,*,*,*,綺麗,キレイ,キレイ
     // だ     	助動詞,*,*,*,特殊・ダ,基本形,だ,ダ,ダ           <- may be this!
-    if (m_morph_type == Morph::MORPH_TYPE::IPADIC
-            && morph->POS() == Morph::POS_TAG::AUXILIARY_VERB
+    if (m_morph_type == Morph::MorphType::IPADIC
+            && morph->POS() == Morph::POSTag::AUXILIARY_VERB
             && m_morphs.size() > 0) {
         // check the previous morph
         std::shared_ptr<IPAMorph> prev
@@ -52,7 +52,7 @@ void Phrase::add(const std::shared_ptr<Morph> morph)
     m_morphs.emplace_back(morph);
 }
 
-bool Phrase::find(const std::string& lemma, Morph::POS_TAG pos) const
+bool Phrase::find(const std::string& lemma, Morph::POSTag pos) const
 {
     std::string concatenated_morphs = "";
     // reverse traversal (concept can be separated into 2 or more parts)

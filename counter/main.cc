@@ -6,17 +6,25 @@
 
 using namespace pmi_toolkit;
 
-Morph::MORPH_TYPE getMorphType(const std::string& morph)
+Counter::CountType countType(const std::string& count)
 {
-    if (morph == "IPA")     return Morph::MORPH_TYPE::IPADIC;
-    if (morph == "JUMAN")   return Morph::MORPH_TYPE::JUMAN;
-    return Morph::MORPH_TYPE::IPADIC;
+    if (count == "COOC")    return Counter::CountType::COOC;
+    if (count == "DEP")     return Counter::CountType::DEP;
+    return Counter::CountType::COOC;
+}
+
+Morph::MorphType morphType(const std::string& morph)
+{
+    if (morph == "IPA")     return Morph::MorphType::IPADIC;
+    if (morph == "JUMAN")   return Morph::MorphType::JUMAN;
+    return Morph::MorphType::IPADIC;
 }
 
 const std::string ARG_ADJ = "adjective";
 const std::string ARG_ANT = "antonym";
 const std::string ARG_TAG = "target_pos";
 const std::string ARG_MOR = "morph";
+const std::string ARG_CNT = "count_type";
 
 void parseArguments(cmdline::parser& p, int argc, char** argv)
 {
@@ -26,6 +34,8 @@ void parseArguments(cmdline::parser& p, int argc, char** argv)
                         cmdline::oneof<std::string>("NOUN", "VERB", "ADJECTIVE"));
     p.add<std::string>(ARG_MOR, 'm', "morph type [IPA | JUMAN]", false, "IPA",
                         cmdline::oneof<std::string>("IPA", "JUMAN"));
+    p.add<std::string>(ARG_CNT, 'c', "count type [COOC | DEP]", false, "COOC",
+                        cmdline::oneof<std::string>("COOC", "DEP"));
     p.parse_check(argc, argv);
 }
 
@@ -41,6 +51,7 @@ int main(int argc, char** argv)
     const std::string antonym       = p.get<std::string>(ARG_ANT);
     const std::string target_pos    = p.get<std::string>(ARG_TAG);
     const std::string morph         = p.get<std::string>(ARG_MOR);
+    const std::string count         = p.get<std::string>(ARG_CNT);
     // === /read arguments ===
 
 
@@ -48,8 +59,9 @@ int main(int argc, char** argv)
     // target_pos = NOUN or VERB or ADJECTIVE
     Counter counter(adjective, antonym,
                                 CounterTags::target(target_pos));
+    counter.setCountType(countType(count));
 
-    Parser parser(getMorphType(morph));
+    Parser parser(morphType(morph));
     counter.count(parser);
 
     counter.output();

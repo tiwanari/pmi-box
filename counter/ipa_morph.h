@@ -38,6 +38,6 @@ public:
                 "助動詞,*,*,*,特殊・ナイ,基本形,ない,ナイ,ナイ");
     }
     virtual inline bool isNegative() { return *this == *negative(); }
-    virtual POS_TAG POSFrom(const std::string& str);
+    virtual POSTag POSFrom(const std::string& str);
 };
 } // namespace pmi_toolkit

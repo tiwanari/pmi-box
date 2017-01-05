@@ -26,12 +26,12 @@ private:
     std::vector<Phrase> m_cur_phrases;
     std::vector<int> m_cur_connections;
 private:
-    void init(const Morph::MORPH_TYPE type);
+    void init(const Morph::MorphType type);
     Parser::Type sentenceType(
         const std::vector<std::string>& splitted_line) const;
     Parser::Type parseLine(const std::string& line);
 public:
-    Parser(const Morph::MORPH_TYPE type);
+    Parser(const Morph::MorphType type);
     bool next();
     const long& lines() const { return m_num_of_lines; }
     const std::string& raw() const { return m_cur_sentence; }

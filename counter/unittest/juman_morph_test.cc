@@ -29,7 +29,7 @@ TEST_F(JumanMorphTest, createAMorphFromASentence)
     JumanMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "ました");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::OTHER);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::OTHER);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"動詞性接尾辞"}));
     ASSERT_EQ(morph.ctype(), "動詞性接尾辞ます型");
     ASSERT_EQ(morph.cform(), "タ形");
@@ -45,7 +45,7 @@ TEST_F(JumanMorphTest, createAMorphFromSentences)
     JumanMorph morph(kMorph, kInfos);
 
     ASSERT_EQ(morph.morph(), "ました");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::OTHER);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::OTHER);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"動詞性接尾辞"}));
     ASSERT_EQ(morph.ctype(), "動詞性接尾辞ます型");
     ASSERT_EQ(morph.cform(), "タ形");
@@ -63,7 +63,7 @@ TEST_F(JumanMorphTest, createAMorphFromASentenceAndAVector)
     JumanMorph morph(kMorph, infos);
 
     ASSERT_EQ(morph.morph(), "ました");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::OTHER);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::OTHER);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"動詞性接尾辞"}));
     ASSERT_EQ(morph.ctype(), "動詞性接尾辞ます型");
     ASSERT_EQ(morph.cform(), "タ形");
@@ -77,7 +77,7 @@ TEST_F(JumanMorphTest, createANounMorphFromASentence)
     JumanMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "切り返し");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::NOUN);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::NOUN);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"普通名詞"}));
     ASSERT_EQ(morph.ctype(), "*");
     ASSERT_EQ(morph.cform(), "*");
@@ -92,7 +92,7 @@ TEST_F(JumanMorphTest, createAnAdjectiveMorphFromASentence)
     JumanMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "大きい");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::ADJECTIVE);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::ADJECTIVE);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"*"}));
     ASSERT_EQ(morph.ctype(), "イ形容詞イ段特殊");
     ASSERT_EQ(morph.cform(), "基本形");

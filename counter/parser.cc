@@ -8,7 +8,7 @@
 #include "util/type.h"
 
 namespace pmi_toolkit {
-Parser::Parser(const Morph::MORPH_TYPE type)
+Parser::Parser(const Morph::MorphType type)
 {
     m_cur_phrase.setMorhpType(type); // use the same morph type (e.g., IPA)
 
@@ -44,18 +44,18 @@ Parser::Type Parser::parseLine(const std::string& line)
     switch (sentenceType(splitted_line)) {
         case Type::DIRECTIVE: {
             // e.g. * 0 1D
-
             // add current phrase into a vector and concatenate sentence
             if (splitted_line[1] != "0") {
                 m_cur_phrases.emplace_back(m_cur_phrase);
                 m_cur_sentence += m_cur_phrase.phrase();
             }
+            m_cur_phrase.clear(); // create a new phrase
+
+            const int id = std::atoi(splitted_line[1].c_str());
+            m_cur_phrase.setId(id);
 
             // atoi converts 1D (string) to 1 (integer) (and D is ignored)
             const int depend = std::atoi(splitted_line[2].c_str());
-            m_cur_phrase.clear();
-            m_cur_phrase.setDepend(depend);
-
             m_cur_connections.emplace_back(depend);
             return Type::DIRECTIVE;
         }
