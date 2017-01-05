@@ -101,6 +101,7 @@ bool Parser::next()
     // initialize variables for the next sentence
     m_cur_sentence = "";
     std::vector<Phrase>().swap(m_cur_phrases);
+    std::vector<int>().swap(m_cur_connections);
 
     m_num_of_lines++; // count
     while (true) {
