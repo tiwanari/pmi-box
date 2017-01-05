@@ -13,9 +13,11 @@ class Counter {
     typedef long long COUNT;
     typedef std::unordered_map<std::string, COUNT> WORD_COUNT;
 public:
-    enum class CountType : unsigned int {
-        COOC,
-        DEP,
+    enum CountType : unsigned int {
+        COOC        = 0x00,
+        DEP_ON      = 0x01, // count (1) target depending on adj/ant
+        DEP_FROM    = 0x10, // count (2) target depended from adj/ant
+        DEP         = 0x11, // count both of (1) and (2)
     };
 private:
     std::string m_adjective;
@@ -47,6 +49,7 @@ private:
     void countCooccurrences(const Parser& parser);
     // == dep ===
     void countDependencies(const Parser& parser);
+    void countEachDependency(const Parser& parser, const int phrase_id, const bool is_pos);
     void countDependedTarget(const Parser& parser, const int src, const bool is_pos);
     void countDependingTarget(const Parser& parser, const int dst, const bool is_pos);
     // == /dep ===

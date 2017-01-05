@@ -8,8 +8,10 @@ using namespace pmi_toolkit;
 
 Counter::CountType countType(const std::string& count)
 {
-    if (count == "COOC")    return Counter::CountType::COOC;
-    if (count == "DEP")     return Counter::CountType::DEP;
+    if (count == "COOC")        return Counter::CountType::COOC;
+    if (count == "DEP_ON")      return Counter::CountType::DEP_ON;
+    if (count == "DEP_FROM")    return Counter::CountType::DEP_FROM;
+    if (count == "DEP")         return Counter::CountType::DEP;
     return Counter::CountType::COOC;
 }
 
@@ -34,8 +36,8 @@ void parseArguments(cmdline::parser& p, int argc, char** argv)
                         cmdline::oneof<std::string>("NOUN", "VERB", "ADJECTIVE"));
     p.add<std::string>(ARG_MOR, 'm', "morph type [IPA | JUMAN]", false, "IPA",
                         cmdline::oneof<std::string>("IPA", "JUMAN"));
-    p.add<std::string>(ARG_CNT, 'c', "count type [COOC | DEP]", false, "COOC",
-                        cmdline::oneof<std::string>("COOC", "DEP"));
+    p.add<std::string>(ARG_CNT, 'c', "count type [COOC | DEP_ON | DEP_FROM | DEP]", false, "COOC",
+                        cmdline::oneof<std::string>("COOC", "DEP_ON", "DEP_FROM", "DEP"));
     p.parse_check(argc, argv);
 }
 

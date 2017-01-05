@@ -39,6 +39,8 @@ void Counter::count(Parser& parser)
                 case CountType::COOC:
                     countCooccurrences(parser);
                     break;
+                case CountType::DEP_ON:
+                case CountType::DEP_FROM:
                 case CountType::DEP:
                     countDependencies(parser);
                     break;
@@ -167,6 +169,20 @@ void Counter::countDependingTarget(const Parser& parser, const int dst, const bo
     }
 }
 
+
+void Counter::countEachDependency(
+    const Parser& parser,
+    const int phrase_id,
+    const bool is_pos)
+{
+    // m_count_type is a bit field
+    if (m_count_type & CountType::DEP_ON)
+        countDependingTarget(parser, phrase_id, is_pos);
+
+    if (m_count_type & CountType::DEP_FROM)
+        countDependedTarget(parser, phrase_id, is_pos);
+}
+
 void Counter::countDependencies(const Parser& parser)
 {
     std::set<std::string> found_targets;
@@ -191,14 +207,12 @@ void Counter::countDependencies(const Parser& parser)
         if ((did_found_adjective && !phrase.isNegative())
                 || (did_found_antonym && phrase.isNegative())) {
             m_total_pos_occurrences++;
-            countDependedTarget(parser, phrase.id(), true);
-            countDependingTarget(parser, phrase.id(), true);
+            countEachDependency(parser, phrase.id(), true);
         }
         // negative
         else {
             m_total_neg_occurrences++;
-            countDependedTarget(parser, phrase.id(), false);
-            countDependingTarget(parser, phrase.id(), false);
+            countEachDependency(parser, phrase.id(), false);
         }
     }
 
