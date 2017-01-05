@@ -56,7 +56,8 @@ public:
     Counter(const std::string& adjective,
             const std::string& antonym,
             const CounterTags::Target& target)
-        : m_adjective(adjective), m_antonym(antonym), m_target(target), m_count_type(CountType::COOC) { m_tag = convertTargetToTag(target); }
+        : m_adjective(adjective), m_antonym(antonym), m_target(target), m_count_type(CountType::COOC)
+            { m_tag = convertTargetToTag(target); }
     void setCountType(const CountType& countType) { m_count_type = countType; }
     void count(Parser& parser);
     void output() const { _write(std::cout); }

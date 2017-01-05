@@ -9,6 +9,7 @@
 namespace pmi_toolkit {
 class Parser {
 private:
+    static constexpr const char* COMMENT_PREFIX = "#";
     static constexpr const char* DIRECTIVE_PREFIX = "*";
     static constexpr const char* EOS_PREFIX = "EOS";
     enum class Type : unsigned char {

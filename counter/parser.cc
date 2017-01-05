@@ -25,9 +25,13 @@ Parser::Type Parser::sentenceType(
     }
 
     const std::string& first_word = splitted_line[0];
-    if (first_word == EOS_PREFIX) {
+    if (first_word == COMMENT_PREFIX) {
+        return Type::UNKNOWN;
+    }
+    else if (first_word == EOS_PREFIX) {
         return Type::EOS;
-    } else if (first_word == DIRECTIVE_PREFIX) {
+    }
+    else if (first_word == DIRECTIVE_PREFIX) {
         if (!util::is<int>(splitted_line[1])) {
             return Type::PLAIN;
         }
