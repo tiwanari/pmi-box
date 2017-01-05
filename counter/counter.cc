@@ -16,17 +16,17 @@ void Counter::reset()
     WORD_COUNT().swap(m_targets_neg_co_occurrences);
 }
 
-Morph::POS_TAG Counter::convertTargetToTag(const CounterTags::Target& target) const
+Morph::POSTag Counter::convertTargetToTag(const CounterTags::Target& target) const
 {
     switch (target) {
         case CounterTags::Target::NOUN:
-            return Morph::POS_TAG::NOUN;
+            return Morph::POSTag::NOUN;
         case CounterTags::Target::VERB:
-            return Morph::POS_TAG::VERB;
+            return Morph::POSTag::VERB;
         case CounterTags::Target::ADJECTIVE:
-            return Morph::POS_TAG::ADJECTIVE;
+            return Morph::POSTag::ADJECTIVE;
     }
-    return Morph::POS_TAG::NOUN;
+    return Morph::POSTag::NOUN;
 }
 
 void Counter::count(Parser& parser)
@@ -35,7 +35,15 @@ void Counter::count(Parser& parser)
 
     try {
         while (parser.next()) {
-            _count(parser);
+            switch (m_count_type) {
+                case CountType::COOC:
+                    countOccurrences(parser);
+                    break;
+                case CountType::DEP:
+                    countDependencies(parser);
+                    break;
+            }
+
             if (parser.lines() % 1000 == 0) {
                 std::cerr << "\r" << "read " << parser.lines() << " lines";
             }
@@ -45,6 +53,16 @@ void Counter::count(Parser& parser)
     catch (const std::runtime_error& e) {
         std::cerr << "counting error!" << std::endl << std::flush;
         throw e;
+    }
+}
+
+void Counter::countStats(const Phrase& phrase)
+{
+    m_total_words += phrase.morphs().size(); // count the number of words in a phrase
+    // insert words into a set
+    for (const auto& morph : phrase.morphs()) {
+        if (morph->isUnknown()) m_vocabulary.insert(morph->morph());
+        else                    m_vocabulary.insert(morph->lemma());
     }
 }
 
@@ -60,7 +78,7 @@ bool Counter::searchTarget(
         did_found = true;
 
         // adjectives sometimes are followed by the negative word
-        if (m_tag == Morph::POS_TAG::ADJECTIVE && phrase.isNegative()) {
+        if (m_tag == Morph::POSTag::ADJECTIVE && phrase.isNegative()) {
             // append the negative word (Japanese grammar)
             // NOTE: this way may miss some words
             // e.g., "綺麗ではない" -> "綺麗でない" ("は" will be ignored)
@@ -76,30 +94,25 @@ bool Counter::searchTarget(
     return did_found;
 }
 
-void Counter::_count(const Parser& parser)
+void Counter::countOccurrences(const Parser& parser)
 {
     bool pos_flag = false;
     bool neg_flag = false;
 
     std::set<std::string> found_targets;
     for (const auto& phrase : parser.phrases()) {
-        // === statistics ===
-        m_total_words += phrase.morphs().size(); // count the number of words in a phrase
-        // insert words into a set
-        for (const auto& morph : phrase.morphs()) {
-            if (morph->isUnknown()) m_vocabulary.insert(morph->morph());
-            else                    m_vocabulary.insert(morph->lemma());
-        }
-        // === /statistics ===
 
-        // search a word with the target tag
+        // count statistics
+        countStats(phrase);
+
+        // -- search a word with the target tag
         searchTarget(phrase, &found_targets);
 
-        // search adjective/antonym
+        // -- search adjective/antonym
         const bool did_found_adjective =
-            phrase.find(m_adjective, Morph::POS_TAG::ADJECTIVE);
+            phrase.find(m_adjective, Morph::POSTag::ADJECTIVE);
         const bool did_found_antonym =
-            phrase.find(m_antonym, Morph::POS_TAG::ADJECTIVE);
+            phrase.find(m_antonym, Morph::POSTag::ADJECTIVE);
 
         // not found
         if (!did_found_adjective && !did_found_antonym) continue;
@@ -120,6 +133,77 @@ void Counter::_count(const Parser& parser)
         m_targets_occurrences[target]++;
         if (pos_flag) m_targets_pos_co_occurrences[target]++;
         if (neg_flag) m_targets_neg_co_occurrences[target]++;
+    }
+}
+
+void Counter::countDependedTarget(const Parser& parser, const int src, const bool is_pos)
+{
+    const int dst = parser.connections()[src];
+    if (dst == -1) return;
+
+    std::set<std::string> found_targets;
+    searchTarget(parser.phrases()[dst], &found_targets);
+
+    for (const auto& target : found_targets) {
+        if (is_pos) m_targets_pos_co_occurrences[target]++;
+        else        m_targets_neg_co_occurrences[target]++;
+    }
+}
+
+void Counter::countDependingTarget(const Parser& parser, const int dst, const bool is_pos)
+{
+    const auto& connections = parser.connections();
+    const auto& phrases = parser.phrases();
+
+    std::set<std::string> found_targets;
+    for (int i = 0; i < connections.size(); ++i) {
+        const auto& con = connections[i];
+        if (con == dst) searchTarget(phrases[i], &found_targets);
+    }
+
+    for (const auto& target : found_targets) {
+        if (is_pos) m_targets_pos_co_occurrences[target]++;
+        else        m_targets_neg_co_occurrences[target]++;
+    }
+}
+
+void Counter::countDependencies(const Parser& parser)
+{
+    std::set<std::string> found_targets;
+    for (const auto& phrase : parser.phrases()) {
+
+        // count statistics
+        countStats(phrase);
+
+        // -- search a word with the target tag
+        searchTarget(phrase, &found_targets);
+
+        // -- search adjective/antonym
+        const bool did_found_adjective =
+            phrase.find(m_adjective, Morph::POSTag::ADJECTIVE);
+        const bool did_found_antonym =
+            phrase.find(m_antonym, Morph::POSTag::ADJECTIVE);
+
+        // not found
+        if (!did_found_adjective && !did_found_antonym) continue;
+
+        // positive
+        if ((did_found_adjective && !phrase.isNegative())
+                || (did_found_antonym && phrase.isNegative())) {
+            m_total_pos_occurrences++;
+            countDependedTarget(parser, phrase.id(), true);
+            countDependingTarget(parser, phrase.id(), true);
+        }
+        // negative
+        else {
+            m_total_neg_occurrences++;
+            countDependedTarget(parser, phrase.id(), false);
+            countDependingTarget(parser, phrase.id(), false);
+        }
+    }
+
+    for (const auto& target : found_targets) {
+        m_targets_occurrences[target]++;
     }
 }
 

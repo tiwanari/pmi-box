@@ -27,7 +27,7 @@ TEST_F(IPAMorphTest, createAMorphFromASentence)
     IPAMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "まし");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::AUXILIARY_VERB);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::AUXILIARY_VERB);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"*","*","*",}));
     ASSERT_EQ(morph.ctype(), "特殊・マス");
     ASSERT_EQ(morph.cform(), "連用形");
@@ -42,7 +42,7 @@ TEST_F(IPAMorphTest, createAMorphFromSentences)
     IPAMorph morph(kMorph, kInfos);
 
     ASSERT_EQ(morph.morph(), "まし");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::AUXILIARY_VERB);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::AUXILIARY_VERB);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"*","*","*",}));
     ASSERT_EQ(morph.ctype(), "特殊・マス");
     ASSERT_EQ(morph.cform(), "連用形");
@@ -59,7 +59,7 @@ TEST_F(IPAMorphTest, createAMorphFromASentenceAndAVector)
     IPAMorph morph(kMorph, infos);
 
     ASSERT_EQ(morph.morph(), "まし");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::AUXILIARY_VERB);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::AUXILIARY_VERB);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"*","*","*",}));
     ASSERT_EQ(morph.ctype(), "特殊・マス");
     ASSERT_EQ(morph.cform(), "連用形");
@@ -73,7 +73,7 @@ TEST_F(IPAMorphTest, createANounMorphFromASentence)
     IPAMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "切り返し");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::NOUN);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::NOUN);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"一般","*","*",}));
     ASSERT_EQ(morph.ctype(), "*");
     ASSERT_EQ(morph.cform(), "*");
@@ -87,7 +87,7 @@ TEST_F(IPAMorphTest, createAnAdjectiveMorphFromASentence)
     IPAMorph morph(kInputText);
 
     ASSERT_EQ(morph.morph(), "大きい");
-    ASSERT_EQ(morph.POS(), Morph::POS_TAG::ADJECTIVE);
+    ASSERT_EQ(morph.POS(), Morph::POSTag::ADJECTIVE);
     ASSERT_EQ(morph.subPOSs(), std::vector<std::string>({"自立","*","*",}));
     ASSERT_EQ(morph.ctype(), "形容詞・イ段");
     ASSERT_EQ(morph.cform(), "基本形");

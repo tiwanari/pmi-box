@@ -71,20 +71,20 @@ std::shared_ptr<Morph> IPAMorph::createAdjectiveMorph(
     return std::make_shared<IPAMorph>(new_morph_infos.str());
 }
 
-Morph::POS_TAG IPAMorph::POSFrom(const std::string& str)
+Morph::POSTag IPAMorph::POSFrom(const std::string& str)
 {
     if (str == STR_POS_NOUN) {
-        return POS_TAG::NOUN;
+        return POSTag::NOUN;
     }
     else if (str == STR_POS_VERB) {
-        return POS_TAG::VERB;
+        return POSTag::VERB;
     }
     else if (str == STR_POS_ADJECTIVE) {
-        return POS_TAG::ADJECTIVE;
+        return POSTag::ADJECTIVE;
     }
     else if (str == STR_POS_AUXILIARY_VERB) {
-        return POS_TAG::AUXILIARY_VERB;
+        return POSTag::AUXILIARY_VERB;
     }
-    return POS_TAG::OTHER;
+    return POSTag::OTHER;
 };
 } // namespace pmi_toolkit

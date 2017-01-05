@@ -6,28 +6,28 @@
 namespace pmi_toolkit {
 class Phrase {
 private:
-    int m_depend;
+    int m_id;
     bool m_is_negative;
-    Morph::MORPH_TYPE m_morph_type;
+    Morph::MorphType m_morph_type;
     std::vector<std::shared_ptr<Morph>> m_morphs;
 private:
     std::shared_ptr<Morph> createMorph(const std::string& infos);
 public:
-    Phrase() : m_is_negative(false), m_morph_type(Morph::MORPH_TYPE::IPADIC) {}
+    Phrase() : m_is_negative(false), m_morph_type(Morph::MorphType::IPADIC) {}
 
     Phrase(const std::vector<std::shared_ptr<Morph>>& morphs)
-        : m_is_negative(false), m_morph_type(Morph::MORPH_TYPE::IPADIC), m_morphs(morphs) {}
+        : m_is_negative(false), m_morph_type(Morph::MorphType::IPADIC), m_morphs(morphs) {}
 
-    void setMorhpType(const Morph::MORPH_TYPE& type) { m_morph_type = type; }
+    void setMorhpType(const Morph::MorphType& type) { m_morph_type = type; }
 
     void add(std::shared_ptr<Morph> morph);
     void add(const std::string& infos);
-    bool find(const std::string& lemma, Morph::POS_TAG pos) const;
+    bool find(const std::string& lemma, Morph::POSTag pos) const;
     bool isNegative() const { return m_is_negative; }
     void clear();
 
-    void setDepend(int d) { m_depend = d; }
-    const int& depend() const { return m_depend; }
+    void setId(int id) { m_id = id; }
+    const int& id() const { return m_id; }
 
     const std::vector<std::shared_ptr<Morph>>& morphs() const { return m_morphs; }
     std::string phrase() const;

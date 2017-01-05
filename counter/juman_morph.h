@@ -31,6 +31,6 @@ public:
                 "接尾辞,形容詞性述語接尾辞,イ形容詞アウオ段,基本形,ない");
     }
     virtual inline bool isNegative() { return *this == *negative(); }
-    virtual POS_TAG POSFrom(const std::string& str);
+    virtual POSTag POSFrom(const std::string& str);
 };
 } // namespace pmi_toolkit

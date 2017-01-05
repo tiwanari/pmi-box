@@ -11,20 +11,20 @@ namespace pmi_toolkit {
  */
 class Morph {
 public:
-   enum class MORPH_TYPE : unsigned char {
+   enum class MorphType : unsigned char {
        JUMAN,
-       IPADIC
+       IPADIC,
    };
-   enum class POS_TAG : unsigned char {
+   enum class POSTag : unsigned char {
        NOUN,
        VERB,
        ADJECTIVE,
        AUXILIARY_VERB,
-       OTHER
+       OTHER,
    };
 protected:
     std::string m_morph;
-    POS_TAG m_pos;
+    POSTag m_pos;
     std::vector<std::string> m_sub_poss;
     std::string m_ctype;
     std::string m_cform;
@@ -34,7 +34,7 @@ public:
         throw (std::runtime_error) = 0;
     virtual ~Morph() {};
     const std::string& morph() const { return m_morph; }
-    const POS_TAG& POS() const { return m_pos; }
+    const POSTag& POS() const { return m_pos; }
     const std::vector<std::string>& subPOSs() const { return m_sub_poss; }
     const std::string& ctype() const { return m_ctype; }
     const std::string& cform() const { return m_cform; }
@@ -45,6 +45,6 @@ public:
 public:
     virtual std::shared_ptr<Morph> negative() = 0;
     virtual bool isNegative() = 0;
-    virtual POS_TAG POSFrom(const std::string& str) = 0;
+    virtual POSTag POSFrom(const std::string& str) = 0;
 };
 } // namespace pmi_toolkit

@@ -26,7 +26,8 @@ options:
   -n, --antonym       antonym (string)
   -p, --target_pos    POS [NOUN | VERB | ADJECTIVE] (string)
   -m, --morph         morph type [IPA | JUMAN] (string [=IPA])
-  -?, --help          print this message./main adjective antonym target_pos < text_processed_with_jdepp
+  -c, --count_type    count type [COOC | DEP] (string [=COOC])
+  -?, --help          print this messageusage: ./main --adjective=string --antonym=string --target_pos=string [options] ...
 
 e.g., ./main -a 大きい -n "" -p ADJECTIVE < foo.txt
 ```
@@ -39,12 +40,25 @@ e.g., ./main -a 大きい -n "" -p ADJECTIVE < foo.txt
 | VERB        | 動詞                |
 | ADJECTIVE   | 形容詞 (と形容動詞) |
 
-`maroph` は，以下の 3 つから選べます．
+`morph` は，以下の 2 つから選べます．
 
-| maroph | 意味                |
-|:-------|:--------------------|
-| IPA    | IPA 辞書形態素      |
-| JUMAN  | JUAMN 辞書形態素    |
+| morph | 意味                |
+|:------|:--------------------|
+| IPA   | IPA 辞書形態素      |
+| JUMAN | JUAMN 辞書形態素    |
+
+`count_type` は，以下の 2 つから選べます．
+それぞれ，対象とする品詞の語が，
+形容詞 (あるいは対義語) とどのような関係にあるときに
+一緒に出現したと数え上げるかを指定します．
+したがって，`P_COOC` や `N_COOC` は変化しますが，
+`OC` については変化しません ([出力](#出力) の項を参照)．
+
+| count\_type | 意味                                         |
+|:------------|:---------------------------------------------|
+| COOC        | 共起する語を対象                             |
+| DEP         | 係り受け (係る・受けるいずれか) の語のみ対象 |
+
 
 #### 入力
 入力として [J.DepP - C++ implementation of Japanese Dependency Parsers]( https://goo.gl/6iF0mD ) によって処理された文を想定しています．
