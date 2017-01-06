@@ -55,6 +55,7 @@ private:
     // == /dep ===
 
     void _write(std::ostream& output_file) const;
+
 public:
     Counter(const std::string& adjective,
             const std::string& antonym,

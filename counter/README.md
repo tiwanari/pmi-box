@@ -27,7 +27,7 @@ options:
   -p, --target_pos    POS [NOUN | VERB | ADJECTIVE] (string)
   -m, --morph         morph type [IPA | JUMAN] (string [=IPA])
   -c, --count_type    count type [COOC | DEP] (string [=COOC])
-  -?, --help          print this messageusage: ./main --adjective=string --antonym=string --target_pos=string [options] ...
+  -?, --help          print this message
 
 e.g., ./main -a 大きい -n "" -p ADJECTIVE < foo.txt
 ```
@@ -65,7 +65,7 @@ e.g., ./main -a 大きい -n "" -p ADJECTIVE < foo.txt
 #### 入力
 入力として [J.DepP - C++ implementation of Japanese Dependency Parsers]( https://goo.gl/6iF0mD ) によって処理された文を想定しています．
 
-NOTE: 現在の実装では，特に係り受けを使う必要はないのですが，節に分かれた形で出力されると処理が楽という実装上の都合で利用しています．
+**NOTE: `#` で始まる行はコメント行として無視されます．**
 
 
 #### 出力
