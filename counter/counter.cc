@@ -79,14 +79,18 @@ bool Counter::searchTarget(
         // found something!
         did_found = true;
 
-        std::string target = morph->lemma();
+        std::string target;
         switch (m_tag) {
+            case Morph::POSTag::VERB:
             case Morph::POSTag::ADJECTIVE: {
+                target = morph->lemma();    // use lemma
                 // append the negative tag
                 if (phrase.isNegative()) target += "_NEG";
                 break;
             }
             default:
+                if (morph->isUnknown()) target = morph->morph();
+                else                    target = morph->lemma();
                 break;
         }
         found_targets->emplace(target);
