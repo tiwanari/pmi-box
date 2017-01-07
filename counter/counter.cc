@@ -79,19 +79,17 @@ bool Counter::searchTarget(
         // found something!
         did_found = true;
 
-        // adjectives sometimes are followed by the negative word
-        if (m_tag == Morph::POSTag::ADJECTIVE && phrase.isNegative()) {
-            // append the negative word (Japanese grammar)
-            // NOTE: this way may miss some words
-            // e.g., "綺麗ではない" -> "綺麗でない" ("は" will be ignored)
-            const std::string t = morph->morph() + morph->negative()->morph();
-            found_targets->emplace(t);
+        std::string target = morph->lemma();
+        switch (m_tag) {
+            case Morph::POSTag::ADJECTIVE: {
+                // append the negative tag
+                if (phrase.isNegative()) target += "_NEG";
+                break;
+            }
+            default:
+                break;
         }
-        else {
-            // unknown words don't have their lemma
-            if (morph->isUnknown()) found_targets->emplace(morph->morph());
-            else                    found_targets->emplace(morph->lemma());
-        }
+        found_targets->emplace(target);
     }
     return did_found;
 }
