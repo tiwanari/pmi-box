@@ -10,8 +10,8 @@
 
 namespace pmi_toolkit {
 class Counter {
-    typedef long long COUNT;
-    typedef std::unordered_map<std::string, COUNT> WORD_COUNT;
+    using Count = long long;
+    using WordCount = std::unordered_map<std::string, Count>;
 public:
     enum CountType : unsigned int {
         COOC        = 0x00,
@@ -27,18 +27,18 @@ private:
 
     CountType m_count_type;
 
-    COUNT m_total_words; // # all words
+    Count m_total_words; // # all words
     std::set<std::string> m_vocabulary; // # of vocabulary
 
-    COUNT m_total_pos_occurrences; // adjective or (not antonym)
-    COUNT m_total_neg_occurrences; // antonym or (not adjective)
+    Count m_total_pos_occurrences; // adjective or (not antonym)
+    Count m_total_neg_occurrences; // antonym or (not adjective)
 
     // occurrence(word) where 'word' has the target tag (m_tag)
-    WORD_COUNT m_targets_occurrences;
+    WordCount m_targets_occurrences;
 
     // co-occurrence(word, pos/neg)
-    WORD_COUNT m_targets_pos_co_occurrences;
-    WORD_COUNT m_targets_neg_co_occurrences;
+    WordCount m_targets_pos_co_occurrences;
+    WordCount m_targets_neg_co_occurrences;
 
 private:
     void reset();

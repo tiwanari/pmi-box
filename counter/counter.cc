@@ -10,10 +10,10 @@ void Counter::reset()
     m_total_pos_occurrences = 0; // adjective or (not antonym)
     m_total_neg_occurrences = 0; // antonym or (not adjective)
 
-    WORD_COUNT().swap(m_targets_occurrences);
+    WordCount().swap(m_targets_occurrences);
 
-    WORD_COUNT().swap(m_targets_pos_co_occurrences);
-    WORD_COUNT().swap(m_targets_neg_co_occurrences);
+    WordCount().swap(m_targets_pos_co_occurrences);
+    WordCount().swap(m_targets_neg_co_occurrences);
 }
 
 Morph::POSTag Counter::convertTargetToTag(const CounterTags::Target& target) const
