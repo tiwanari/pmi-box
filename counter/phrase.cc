@@ -68,9 +68,6 @@ bool Phrase::find(const std::string& lemma, Morph::POSTag pos) const
         if (morph->isUnknown()) concatenated_morphs.insert(0, morph->morph());
         else                    concatenated_morphs.insert(0, morph->lemma());
 
-        // check it size is over the lemma
-        if (concatenated_morphs.size() > lemma.size()) break;
-
         // check lemma
         if (concatenated_morphs == lemma) return true;
     }
