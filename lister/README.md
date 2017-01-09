@@ -13,11 +13,12 @@ Turney の極性指標 (SO 値) に基いての k 個の best / worst の
 ## run
 
 ```
-./run.rb --input counted.csv -k (default: 10) --min-occurrence (default: 1)
-e.g., ./run.rb --input counted.csv -k 100
+./run.rb --input counted.csv -k (default: 10) --min-occurrence (default: 1) [--output-path]
+e.g., ./run.rb -i counted.csv -k 20 -m 5 -o ./out
 ```
 
-なお， `--input` や `--min-occurrence` には， `-i` や `-m` が代わりに使えます．
+なお， `--input` や `--min-occurrence` などには，
+`-i` や `-m` などが代わりに使えます．
 
 #### 入力
 [counter](./counter) が出力した結果です．
@@ -25,6 +26,14 @@ e.g., ./run.rb --input counted.csv -k 100
 
 #### 出力
 出力は標準出力に吐かれます．
+
+`-o` オプションで出力先を指定した場合は，
+そのフォルダの中に上位・下位 `K` 個を
+それぞれ `best_k.txt`， `worst_k.txt` として書き出します．
+この際は，`_NEG` とつくものは，
+反対のリストへ追加され，
+また， `adjective` と `antonym` は除かれます．
+
 
 e.g.,
 
