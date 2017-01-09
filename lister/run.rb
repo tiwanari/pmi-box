@@ -2,12 +2,14 @@
 require 'optparse'
 require 'csv'
 require 'pp'
+require 'fileutils'
 require_relative 'lister'
 
-params = ARGV.getopts('', 'input:', 'k:10', 'min-occurrence:1')
+params = ARGV.getopts('', 'input:', 'k:10', 'min-occurrence:1', 'output-path:')
 
 if !params['input']
-    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurrence (default: 1)"
+    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurrence (default: 1) [--output-path]"
+    STDERR.puts "e.g., #{__FILE__} -i counted.csv -k 20 -m 5 -o ./out"
     exit 1
 end
 
@@ -43,14 +45,63 @@ STDERR.puts "K: #{k}"
 STDERR.puts "ignored: #{lister.ignored}"
 
 STDERR.puts "best  K: "
-PP.pp lister.best_k(k), STDERR
+best_k = lister.best_k(k)
+PP.pp best_k, STDERR
 
 STDERR.puts "worst K: "
-PP.pp lister.worst_k(k), STDERR
+worst_k = lister.worst_k(k)
+PP.pp worst_k, STDERR
 
-# pass the results to the standard output
-k_best  = lister.best_k(k).map {|adj,_| adj}.join(",")
-k_worst = lister.worst_k(k).map {|adj,_| adj}.join(",")
 
-STDERR.puts "write the results to the standard output: "
-print "#{k_best} #{k_worst}"
+# output {{{
+NEGATIVE_SUFFIX = "_NEG"
+def remove_suffix(str)
+    return str.gsub(NEGATIVE_SUFFIX, "")
+end
+
+def exchange_negatives(best, worst)
+    new_best = []
+    new_worst = []
+
+    best.each do |target, _|
+        if target.end_with?(NEGATIVE_SUFFIX)
+            new_worst << remove_suffix(target)
+        else
+            new_best << target
+        end
+    end
+
+    worst.each do |target, _|
+        if target.end_with?(NEGATIVE_SUFFIX)
+            new_best << remove_suffix(target)
+        else
+            new_worst << target
+        end
+    end
+
+    return new_best, new_worst
+end
+
+def remove_originals(list, lister)
+    return list.reject{|item| item == lister.adjective || item == lister.antonym }
+end
+
+unless params["output-path"].nil?
+    out = params["output-path"]
+
+    BEST_PATH  = "best_k.txt"
+    WORST_PATH = "worst_k.txt"
+
+    FileUtils.mkdir_p(out)
+    STDERR.puts "output_path:   best  -> #{out}/#{BEST_PATH}"
+    STDERR.puts "               worst -> #{out}/#{WORST_PATH}"
+
+    # clean up lists
+    new_best, new_worst = exchange_negatives(best_k, worst_k)
+    new_best  = remove_originals(new_best, lister)
+    new_worst = remove_originals(new_worst, lister)
+
+    File.write("#{out}/#{BEST_PATH}",  new_best.join("\n"))
+    File.write("#{out}/#{WORST_PATH}", new_worst.join("\n"))
+end
+# /output }}}
