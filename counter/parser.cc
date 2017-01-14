@@ -29,6 +29,7 @@ Parser::Type Parser::sentenceType(
         return Type::UNKNOWN;
     }
     else if (first_word == EOS_PREFIX) {
+        if (splitted_line.size() != 1) return Type::EOS;
         return Type::EOS;
     }
     else if (first_word == DIRECTIVE_PREFIX) {
