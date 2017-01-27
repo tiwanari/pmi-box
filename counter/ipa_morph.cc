@@ -67,7 +67,7 @@ std::shared_ptr<Morph> IPAMorph::createAdjectiveMorph(
     new_morph_infos
         << noun->morph() << aux_verb->morph() << "\t"
         << STR_POS_ADJECTIVE << ",*,*,*,*,*,"
-        << noun->lemma() << aux_verb->lemma();
+        << noun->lemma() << "だ"; // aux_verb->lemma();
     return std::make_shared<IPAMorph>(new_morph_infos.str());
 }
 
