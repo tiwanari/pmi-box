@@ -5,10 +5,10 @@ require 'pp'
 require 'fileutils'
 require_relative 'lister'
 
-params = ARGV.getopts('', 'input:', 'k:10', 'min-occurrence:1', 'output-path:')
+params = ARGV.getopts('', 'input:', 'k:10', 'min-occurrence:1', 'output-path:', 'black-list:')
 
 if !params['input']
-    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurrence (default: 1) [--output-path]"
+    STDERR.puts "Usage: #{__FILE__} --input counted.csv -k (default: 10) --min-occurrence (default: 1) [--output-path file] [--black-list list]"
     STDERR.puts "e.g., #{__FILE__} -i counted.csv -k 20 -m 5 -o ./out"
     exit 1
 end
@@ -21,7 +21,12 @@ STDERR.puts "input file: #{input}"
 STDERR.puts "k: #{k}"
 STDERR.puts "min occurrence: #{m}"
 
-lister = Lister.new(input)
+black_list = nil
+unless params["black-list"].nil?
+    black_list = File.open(params["black-list"]).read.split("\n")
+end
+
+lister = Lister.new(input, black_list)
 lister.min_oc = m
 
 STDERR.puts "reading #{input}..."
@@ -54,54 +59,18 @@ PP.pp worst_k, STDERR
 
 
 # output {{{
-NEGATIVE_SUFFIX = "_NEG"
-def remove_suffix(str)
-    return str.gsub(NEGATIVE_SUFFIX, "")
-end
-
-def exchange_negatives(best, worst)
-    new_best = []
-    new_worst = []
-
-    best.each do |target, _|
-        if target.end_with?(NEGATIVE_SUFFIX)
-            new_worst << remove_suffix(target)
-        else
-            new_best << target
-        end
-    end
-
-    worst.each do |target, _|
-        if target.end_with?(NEGATIVE_SUFFIX)
-            new_best << remove_suffix(target)
-        else
-            new_worst << target
-        end
-    end
-
-    return new_best, new_worst
-end
-
-def remove_originals(list, lister)
-    return list.reject{|item| item == lister.adjective || item == lister.antonym }
-end
 
 unless params["output-path"].nil?
     out = params["output-path"]
 
-    BEST_PATH  = "best_k.txt"
-    WORST_PATH = "worst_k.txt"
+    BEST_PATH  = "best_#{k}_m#{m}.txt"
+    WORST_PATH = "worst_#{k}_m#{m}.txt"
 
     FileUtils.mkdir_p(out)
     STDERR.puts "output_path:   best  -> #{out}/#{BEST_PATH}"
     STDERR.puts "               worst -> #{out}/#{WORST_PATH}"
 
-    # clean up lists
-    new_best, new_worst = exchange_negatives(best_k, worst_k)
-    new_best  = remove_originals(new_best, lister)
-    new_worst = remove_originals(new_worst, lister)
-
-    File.write("#{out}/#{BEST_PATH}",  new_best.join("\n"))
-    File.write("#{out}/#{WORST_PATH}", new_worst.join("\n"))
+    File.write("#{out}/#{BEST_PATH}",  best_k.map{|k,_| k}.join("\n"))
+    File.write("#{out}/#{WORST_PATH}", worst_k.map{|k,_| k}.join("\n"))
 end
 # /output }}}

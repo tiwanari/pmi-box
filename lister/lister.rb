@@ -2,7 +2,7 @@ require 'csv'
 
 
 class Lister
-    attr_accessor :min_oc
+    attr_accessor :min_oc, :min_cooc
     attr_reader :ignored, :adjective, :antonym, :tag, :total_words, :vocabulary, :pos_oc, :neg_oc
 
     ADJ_STR = "ADJ"
@@ -16,13 +16,17 @@ class Lister
     POS_CO_OCCURRENCES_STR = "P_COOC"
     NEG_CO_OCCURRENCES_STR = "N_COOC"
 
-    def initialize(input)
+    NEGATIVE_SUFFIX = "_NEG"
+
+    def initialize(input, black_list = nil)
         @input = input
         @words = []
         @raw_data = { OCCURRENCES_STR => {}, POS_CO_OCCURRENCES_STR => {}, NEG_CO_OCCURRENCES_STR => {},}
         @so_values = {}
         @ignored = 0
         @min_oc = 1
+        @min_cooc = 1
+        @black_list = black_list
     end
 
     def read_adjective(row)
@@ -102,8 +106,29 @@ class Lister
 
     def calc_so_scores
         @raw_data[OCCURRENCES_STR].each do |k, v|
+            # ignore adjective/antonym
+            if k == @adjective || k == @antonym
+                @ignored += 1
+                next
+            end
+            # ignore w/ negative
+            if k.end_with?(NEGATIVE_SUFFIX)
+                @ignored += 1
+                next
+            end
             # ignore rare words
             if v < min_oc
+                @ignored += 1
+                next
+            end
+            # ignore black list words
+            if @black_list.include?(k)
+                @ignored += 1
+                next
+            end
+            # ignore rarely co-occurred words
+            if @raw_data[POS_CO_OCCURRENCES_STR][k] < @min_cooc \
+                    && @raw_data[NEG_CO_OCCURRENCES_STR][k] < @min_cooc
                 @ignored += 1
                 next
             end
